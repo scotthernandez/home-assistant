@@ -57,6 +57,7 @@ class GoogleAssistantView(HomeAssistantView):
         """Determine if an entity should be exposed to Google Assistant."""
         if entity.attributes.get('view') is not None:
             # Ignore entities that are views
+            _LOGGER.info("Ignoring request for VIEW entity: %s", entity)
             return False
 
         domain = entity.domain.lower()
@@ -71,6 +72,7 @@ class GoogleAssistantView(HomeAssistantView):
         is_default_exposed = \
             domain_exposed_by_default and explicit_expose is not False
 
+        _LOGGER.info("is_entity_exposed returning: default_exposed=%i or explicit_exposed=%i ", is_default_exposed, explicit_expose)
         return is_default_exposed or explicit_expose
 
     @asyncio.coroutine
@@ -88,6 +90,7 @@ class GoogleAssistantView(HomeAssistantView):
 
             devices.append(device)
 
+        _LOGGER.info("Responding to sync request: %s", str)
         return self.json(
             _make_actions_response(request_id,
                                    {'agentUserId': self.agent_user_id,
@@ -114,6 +117,7 @@ class GoogleAssistantView(HomeAssistantView):
 
             devices[devid] = query_device(state, hass.config.units)
 
+        _LOGGER.info("Responding to query request: %s for devices: %s", str, list)
         return self.json(
             _make_actions_response(request_id, {'devices': devices}))
 
@@ -144,6 +148,7 @@ class GoogleAssistantView(HomeAssistantView):
                         result['status'] = 'ERROR'
                     commands.append(result)
 
+        _LOGGER.info("Responding to exec request: %s for commands: %s", str, list)
         return self.json(
             _make_actions_response(request_id, {'commands': commands}))
 
@@ -186,4 +191,6 @@ class GoogleAssistantView(HomeAssistantView):
 
 
 def _make_actions_response(request_id: str, payload: dict) -> dict:
-    return {'requestId': request_id, 'payload': payload}
+    resp = {'requestId': request_id, 'payload': payload}
+    _LOGGER.info("_make_actions_response -> %s", resp)
+    return resp
