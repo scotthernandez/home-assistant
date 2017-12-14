@@ -88,6 +88,7 @@ virtualization/vagrant/config
 
 # Visual Studio Code
 .vscode
+home-assistant_hdi_settings.json
 
 # Built docs
 docs/build
