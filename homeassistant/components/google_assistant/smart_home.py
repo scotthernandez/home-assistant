@@ -64,12 +64,6 @@ MAPPING_COMPONENT = {
     climate.DOMAIN: [TYPE_THERMOSTAT, TRAIT_TEMPERATURE_SETTING, None],
 }  # type: Dict[str, list]
 
-
-def make_actions_response(request_id: str, payload: dict) -> dict:
-    """Make response message."""
-    return {'requestId': request_id, 'payload': payload}
-
-
 def entity_to_device(entity: Entity, units: UnitSystem):
     """Convert a hass entity into an google actions device."""
     class_data = MAPPING_COMPONENT.get(
